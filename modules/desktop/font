@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Downloading 'Iosevka.zip' from Github..."
+wget "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Iosevka.zip"
+log "Extracting 'Iosevka.zip'..."
+unzip -d IosevkaNF Iosevka.zip
+log "Installing 'IosevkaNF' to '/usr/share/fonts/truetype'..."
+sudo rm -rf /usr/share/fonts/truetype/IosevkaNF
+sudo mv IosevkaNF /usr/share/fonts/truetype
+popd
+rm -rf "$temp"
+
+log "Setting monospaced font to 'Iosevka Nerd Font Mono 12'..."
+dconf write /org/gnome/desktop/interface/monospace-font-name "'Iosevka Nerd Font Mono 12'"

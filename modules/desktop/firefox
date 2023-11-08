@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+install firefox
+
+log "Killing all Firefox instances..."
+killall firefox-bin || true
+
+log "Remove all Firefox configurations..."
+rm -rf "$HOME/.mozilla"
+
+prefs="$HOME/.mozilla/firefox/**/prefs.js"
+
+log "Starting Firefox..."
+firefox > /dev/null 2>&1 & disown
+
+while ! ls $prefs > /dev/null 2>&1; do
+  log "Waiting for file '$prefs'..."
+  sleep 1
+done
+
+log "Killing all Firefox instances..."
+killall firefox-bin || true
+
+prefs="$(ls $prefs)"
+prefs="$(dirname "$prefs")/user.js"
+log "Using '$prefs'..."
+rm -f "$prefs"
+
+log "Appening Firefox configurations..."
+echo 'user_pref("app.shield.optoutstudies.enabled", false);' >> "$prefs"
+echo 'user_pref("browser.discovery.enabled", false);' >> "$prefs"
+echo 'user_pref("browser.formfill.enable", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.feeds.topsites", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.section.highlights.includeVisited", false);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.showSearch", true);' >> "$prefs"
+echo 'user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);' >> "$prefs"
+echo 'user_pref("browser.search.suggest.enabled", false);' >> "$prefs"
+echo 'user_pref("browser.toolbars.bookmarks.visibility", "never");' >> "$prefs"
+echo 'user_pref("browser.uiCustomization.state", "{\"placements\":{\"widget-overflow-fixed-list\":[],\"unified-extensions-area\":[\"ublock0_raymondhill_net-browser-action\",\"_ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2_-browser-action\"],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"urlbar-container\",\"downloads-button\",\"unified-extensions-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"PersonalToolbar\":[\"personal-bookmarks\"]},\"seen\":[\"save-to-pocket-button\",\"developer-button\",\"ublock0_raymondhill_net-browser-action\",\"_ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2_-browser-action\"],\"dirtyAreaCache\":[\"nav-bar\",\"toolbar-menubar\",\"TabsToolbar\",\"PersonalToolbar\",\"unified-extensions-area\"],\"currentVersion\":19,\"newElementCount\":4}");' >> "$prefs"
+echo 'user_pref("browser.urlbar.placeholderName", "DuckDuckGo");' >> "$prefs"
+echo 'user_pref("browser.urlbar.placeholderName.private", "DuckDuckGo");' >> "$prefs"
+echo 'user_pref("browser.urlbar.showSearchSuggestionsFirst", false);' >> "$prefs"
+echo 'user_pref("browser.urlbar.suggest.bookmark", false);' >> "$prefs"
+echo 'user_pref("browser.urlbar.suggest.engines", false);' >> "$prefs"
+echo 'user_pref("browser.urlbar.suggest.openpage", false);' >> "$prefs"
+echo 'user_pref("browser.urlbar.suggest.searches", false);' >> "$prefs"
+echo 'user_pref("browser.urlbar.suggest.topsites", false);' >> "$prefs"
+echo 'user_pref("datareporting.healthreport.uploadEnabled", false);' >> "$prefs"
+echo 'user_pref("privacy.history.custom", true);' >> "$prefs"
+echo 'user_pref("signon.autofillForms", false);' >> "$prefs"
+echo 'user_pref("signon.firefoxRelay.feature", "disabled");' >> "$prefs"
+echo 'user_pref("signon.generation.enabled", false);' >> "$prefs"
+echo 'user_pref("signon.rememberSignons", false);' >> "$prefs"
+echo 'user_pref("toolkit.telemetry.pioneer-new-studies-available", false);' >> "$prefs"
+
+if ! command -v "htmlq" > /dev/null; then
+  . "./modules/base/htmlq"
+fi
+
+extensions="$(dirname "$prefs")/extensions"
+mkdir -p "$extensions"
+
+function install_extension() {
+  name="$1"
+  id="$2"
+  log "Installing '$name' for Firefox..."
+  link="$(curl -s https://addons.mozilla.org/de/firefox/addon/"$name"/ | htmlq --pretty '[href$=".xpi"]' --attribute href)"
+  curl -s "$link" -o "$extensions/$id.xpi" 
+}
+
+install_extension "dictionary-german-swiss" "de-CH@dictionaries.addons.mozilla.org"
+install_extension "ublock-origin" "uBlock0@raymondhill.net"
+install_extension "clear-browsing-data" "{ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2}"
+

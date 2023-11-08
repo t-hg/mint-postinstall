@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+log "Installing 'bash-preexec'..."
+sudo rm -rf /opt/bash-preexec
+sudo git clone https://github.com/rcaloras/bash-preexec /opt/bash-preexec
+
+log "Installing 'bash-config' for user '$(whomai)'..."
+mkdir -p "$HOME/.config"
+rm -rf "$HOME/.config/bash"
+git clone https://github.com/t-hg/bash-config "$HOME/.config/bash"
+
+log "Writing '$HOME/.bashrc'..."
+rm -rf "$HOME/.bashrc"
+echo 'BASH_PREEXEC=/opt/bash-preexec/bash-preexec.sh' >> "$HOME/.bashrc"
+echo 'FZF_KEY_BINDINGS=/usr/share/doc/fzf/examples/key-bindings.bash' >> "$HOME/.bashrc"
+echo 'GIT_PROMPT=/etc/bash_completion.d/git-prompt' >> "$HOME/.bashrc"
+echo '. $HOME/.config/bash/bashrc' >> "$HOME/.bashrc"
+
+log "Installing 'bash-config' for root..."
+sudo mkdir -p /root/.config
+sudo rm -rf "/root/.config/bash"
+sudo git clone https://github.com/t-hg/bash-config "/root/.config/bash"
+
+log "Writing '/root/.bashrc'..."
+sudo rm -rf "/root/.bashrc"
+echo 'BASH_PREEXEC=/opt/bash-preexec/bash-preexec.sh' | sudo tee -a "/root/.bashrc" > /dev/null
+echo 'FZF_KEY_BINDINGS=/usr/share/doc/fzf/examples/key-bindings.bash' | sudo tee -a "/root/.bashrc" > /dev/null
+echo 'GIT_PROMPT=/etc/bash_completion.d/git-prompt' | sudo tee -a "/root/.bashrc" > /dev/null
+echo '. $HOME/.config/bash/bashrc' | sudo tee -a "/root/.bashrc" > /dev/null

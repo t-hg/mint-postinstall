@@ -1,0 +1,5 @@
+#!/usr/bin/env git
+
+install git
+read -r -p "user.name: " name && git config --global user.name "$name"
+read -r -p "user.email: " email && git config --global user.email "$email"

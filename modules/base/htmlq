@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Downloading 'htmlq'..."
+wget "https://github.com/mgdm/htmlq/releases/latest/download/htmlq-x86_64-linux.tar.gz"
+log "Extracting 'htmlq'..."
+tar xvf htmlq-x86_64-linux.tar.gz
+log "Installing 'htmlq'..."
+sudo mv htmlq /usr/local/bin/htmlq
+popd
+rm -rf "$temp"

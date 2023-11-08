@@ -1,0 +1,7 @@
+color_blue="\033[1;34m"
+color_reset="\033[0;0m"
+
+function log() {
+  message="$1"
+  echo -e "${color_blue}[mint-postinstall] ${message}${color_reset}"
+}

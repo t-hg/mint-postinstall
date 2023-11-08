@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Downloading 'nvim-linux64.tar' from Github..."
+wget "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+log "Extracting 'nvim-linux64.tar'..."
+tar xf nvim-linux64.tar.gz
+log "Installing 'nvim-linux64' to '/opt'..."
+sudo rm -rf /opt/nvim-linux64
+sudo mv nvim-linux64 /opt
+popd
+rm -rf "$temp"
+
+log "Install alternative for 'vi'..."
+sudo update-alternatives --install /usr/local/bin/vi vi /opt/nvim-linux64/bin/nvim 0
+log "Install alternative for 'vim'..."
+sudo update-alternatives --install /usr/local/bin/vim vim /opt/nvim-linux64/bin/nvim 0
+log "Install alternative for 'nvim'..."
+sudo update-alternatives --install /usr/local/bin/nvim nvim /opt/nvim-linux64/bin/nvim 0
+
+log "Set alternative for 'vi'..."
+sudo update-alternatives --set vi /opt/nvim-linux64/bin/nvim
+log "Set alternative for 'vim'..."
+sudo update-alternatives --set vim /opt/nvim-linux64/bin/nvim
+log "Set alternative for 'nvim'..."
+sudo update-alternatives --set nvim /opt/nvim-linux64/bin/nvim
+
+user="$(whoami)"
+log "Configuring 'neovim' for user '$user'..."
+config="$HOME/.config"
+mkdir -p "$config"
+pushd "$config"
+log "Remove old 'neovim' configuration..."
+rm -rf "$config/nvim"
+log "Cloning new 'neovim' configuration..."
+git clone "https://github.com/t-hg/nvim-config" "$config/nvim"
+popd
+
+log "Configuring 'neovim' for 'root'..."
+config="/root/.config/nvim"
+sudo mkdir -p "$config"
+sudo cp "$HOME/.config/nvim/lua/options.lua" "/root/.config/nvim/init.lua"

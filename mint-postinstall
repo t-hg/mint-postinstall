@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+. "./utils/log"
+. "./utils/install"
+
+install fzf
+
+log "Select modules..."
+modules="$(find ./modules -type f | fzf --multi --layout=reverse --height=20)"
+
+log "Selected modules:"
+for module in $modules; do
+  log "  $module"
+done
+
+for module in $modules; do
+  log "Running module '$module'..."
+  . "$module"
+done

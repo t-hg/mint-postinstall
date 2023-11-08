@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+install build-essential
+install clang

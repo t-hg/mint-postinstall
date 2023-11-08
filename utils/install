@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+function install() {
+  package="$1"
+  log "Installing package '$package'..."
+  sudo apt install -y "$package"
+}
