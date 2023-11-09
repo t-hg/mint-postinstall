@@ -5,3 +5,9 @@ function install() {
   log "Installing package '$package'..."
   sudo apt install -y "$package"
 }
+
+function install_flatpak() {
+  package="$1"
+  log "Installing package '$package'..."
+  flatpak install -y "$package"
+}
