@@ -17,3 +17,6 @@ chmod +x bw
 sudo mv bw /usr/local/bin/
 popd
 rm -rf "$temp"
+
+log "Login..."
+bw login

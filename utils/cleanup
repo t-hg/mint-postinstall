@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+function cleanup() {
+  bw_lock
+}
+
+trap cleanup EXIT

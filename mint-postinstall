@@ -2,8 +2,10 @@
 
 set -e
 
-. "./utils/log"
+. "./utils/bitwarden"
+. "./utils/cleanup"
 . "./utils/install"
+. "./utils/log"
 
 install fzf
 
