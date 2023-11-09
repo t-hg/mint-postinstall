@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+install gron
+log "Finding latest download URL..."
+url="$(curl -s "https://api.github.com/repos/bitwarden/cli/releases/latest" | jq -r '.assets[].browser_download_url' | grep -P "bw-linux-.*\.zip$")"
+log "Found '$url'"
+temp="$(mktemp -d)"
+pushd "$temp"
+zip="$(basename "$url")"
+log "Downloading '$zip'..."
+wget "$url"
+log "Extracting '$zip'..."
+unzip "$zip"
+rm -f "$zip"
+log "Installing 'bw'..."
+chmod +x bw
+sudo mv bw /usr/local/bin/
+popd
+rm -rf "$temp"
