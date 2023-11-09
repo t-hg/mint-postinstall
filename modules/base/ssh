@@ -1,3 +1,28 @@
 #!/usr/bin/env bash
 
+ssh="$HOME/.ssh"
+id_rsa="$ssh/id_rsa"
+id_rsa_pub="$ssh/id_rsa.pub"
+config="$ssh/config"
+
+log "Removing dir and files..."
+rm -rf "$ssh"
+
+log "Creating dir and files..."
+mkdir -p "$ssh"
+touch "$id_rsa"
+touch "$id_rsa_pub"
+touch "$config"
+
+log "Setting file permissions..."
+chmod 600 "$id_rsa"
+chmod 600 "$config"
+
+log "Writing file contents..."
 bw_unlock
+bw get notes "SSH Public Key" --session "$BW_SESSION" > "$ssh/id_rsa.pub"
+bw get notes "SSH Private Key" --session "$BW_SESSION" > "$ssh/id_rsa"
+cat <<'EOF' | tee "$config" > /dev/null
+Host *
+  AddKeysToAgent 1h
+EOF
