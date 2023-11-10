@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+log "Disabling sudo password feedback..."
+sudo mv /etc/sudoers.d/0pwfeedback /etc/sudoers.d/0pwfeedback.disabled
