@@ -16,3 +16,4 @@ for file in $ssh $secrets $pkcs11; do
   echo "X-GNOME-Autostart-enabled=false" >> "$user/$file"
 done
 
+sudo apt autoremove gnome-keyring
