@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+system="/etc/xdg/autostart"
+user="$HOME/.config/autostart"
+
+ssh="gnome-keyring-ssh.desktop"
+secrets="gnome-keyring-secrets.desktop"
+pkcs11="gnome-keyring-pkcs11.desktop"
+
+mkdir -p "$user"
+
+for file in $ssh $secrets $pkcs11; do
+  log "Disable '$file'"
+  rm -f "$user/$file"
+  cp "$system/$file" "$user/$file"
+  echo "X-GNOME-Autostart-enabled=false" >> "$user/$file"
+done
+
