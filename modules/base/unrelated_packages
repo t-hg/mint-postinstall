@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
+install fwupd
 install jq
-install tree
 install plocate
+install tree
 install xclip
