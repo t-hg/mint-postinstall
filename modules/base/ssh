@@ -26,3 +26,7 @@ cat <<'EOF' | tee "$config" > /dev/null
 Host *
   AddKeysToAgent 1h
 EOF
+
+log "Configuring SSH agent..."
+install keychain
+echo 'eval "$(keychain --eval --noask --quiet --agents ssh $HOME/.ssh/id_rsa)"' > $HOME/.bashrc.d/ssh-agent
