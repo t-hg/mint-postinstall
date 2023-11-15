@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+log "Disable gnome-keyring-ssh..."
+
+mkdir -p "$HOME/.config/autostart"
+rm -f "$HOME/.config/autostart/gnome-keyring-ssh.desktop"
+cp /etc/xdg/autostart/gnome-keyring-ssh.desktop "$HOME/.config/autostart"
+echo "X-GNOME-Autostart-enabled=false" >> "$HOME/.config/autostart/gnome-keyring-ssh.desktop"

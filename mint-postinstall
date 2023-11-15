@@ -9,8 +9,7 @@ set -e
 
 install fzf
 
-log "Select modules..."
-modules="$(find ./modules -type f | fzf --multi --layout=reverse --height=20)"
+modules="$(find ./modules -type f | fzf --prompt "Select modules: " --multi --layout=reverse --height=20)"
 
 log "Selected modules:"
 for module in $modules; do

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 install fwupd
+install gron
 install jq
 install plocate
+install ripgrep
 install tree
 install xclip
