@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Downloading zellij..."
+wget https://github.com/zellij-org/zellij/releases/latest/download/zellij-x86_64-unknown-linux-musl.tar.gz
+log "Extracting zellij..."
+tar xf zellij-x86_64-unknown-linux-musl.tar.gz 
+log "Installing zellij..."
+sudo mv zellij /usr/local/bin/
+popd
+rm -rf "$temp"
+log "Writing configuration..."
+rm -rf "$HOME/.config/zellij"
+mkdir -p "$HOME/.config/zellij"
+zellij setup --dump-config > "$HOME/.config/zellij/config.kdl"
+sed 's/\/\/\ copy_command\ "xclip/copy_command\ "xclip/' -i "$HOME/.config/zellij/config.kdl"
