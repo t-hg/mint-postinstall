@@ -26,4 +26,4 @@ GOPATH=$HOME/.go
 export PATH=$GOPATH/bin:$PATH
 EOF
 log "Installing gopls..."
-go install golang.org/x/tools/gopls@latest
+GOPATH=$HOME/.go go install golang.org/x/tools/gopls@latest
