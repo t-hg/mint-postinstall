@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+log "Remove previous installed files..."
+sudo rm -rf /opt/go
+log "Searching latest version..."
+dl_path="$(curl -s https://go.dev/dl/ | htmlq 'a.download' -a href | grep linux-amd64 | head -n1)"
+dl_url="https://go.dev$dl_path"
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Downloading from $dl_url..."
+wget "$dl_url"
+log "Extracting files..."
+tar xf go*linux-amd64.tar.gz
+sudo mv go /opt/
+popd
+rm -rf "$temp"
+log "Updating alternatives..."
+sudo update-alternatives --install /usr/local/bin/go go /opt/go/bin/go 0
+sudo update-alternatives --set go /opt/go/bin/go
+sudo update-alternatives --install /usr/local/bin/gofmt gofmt /opt/go/bin/gofmt 0
+sudo update-alternatives --set gofmt /opt/go/bin/gofmt
