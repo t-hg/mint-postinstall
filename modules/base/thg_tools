@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+log "Remove already installed files..."
+sudo rm -rf "/opt/thg-tools"
+rm -rf "$HOME/.bashrc.d/thg-tools"
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Donwloading installer..."
+git clone https://github.com/t-hg/thg-installer
+sudo ./thg-installer/install.sh
+popd
+rm -rf "$temp"
+log "Configuring PATH variable..."
+cat <<'EOF' | tee "$HOME/.bashrc.d/thg-tools" > /dev/null
+export PATH=/opt/thg-tools/bin:$PATH
+EOF
