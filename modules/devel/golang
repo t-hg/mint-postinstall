@@ -25,3 +25,5 @@ cat <<'EOF' | tee "$HOME/.bashrc.d/golang" > /dev/null
 GOPATH=$HOME/.go
 export PATH=$GOPATH/bin:$PATH
 EOF
+log "Installing gopls..."
+go install golang.org/x/tools/gopls@latest
