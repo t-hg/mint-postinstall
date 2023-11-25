@@ -2,6 +2,7 @@
 
 log "Remove previous installed files..."
 sudo rm -rf /opt/go
+rm -f "$HOME/.bashrc.d/golang"
 log "Searching latest version..."
 dl_path="$(curl -s https://go.dev/dl/ | htmlq 'a.download' -a href | grep linux-amd64 | head -n1)"
 dl_url="https://go.dev$dl_path"
@@ -19,3 +20,8 @@ sudo update-alternatives --install /usr/local/bin/go go /opt/go/bin/go 0
 sudo update-alternatives --set go /opt/go/bin/go
 sudo update-alternatives --install /usr/local/bin/gofmt gofmt /opt/go/bin/gofmt 0
 sudo update-alternatives --set gofmt /opt/go/bin/gofmt
+log "Configuring GOPATH..."
+cat <<'EOF' | tee "$HOME/.bashrc.d/golang" > /dev/null
+GOPATH=$HOME/.go
+export PATH=$GOPATH/bin:$PATH
+EOF
