@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+log "Installing script wrapper..."
+cat <<'EOF' | sudo tee /usr/local/bin/script > /dev/null
+#!/usr/bin/env bash
+PROMPT_COMMAND="echo -n '[script $@] '; $PROMPT_COMMAND" /usr/bin/script "$@"
+EOF
+sudo chmod +x /usr/local/bin/script
