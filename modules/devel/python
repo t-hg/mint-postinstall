@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+log "Installing pyright..."
+sudo npm install -g pyright
