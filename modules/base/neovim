@@ -41,3 +41,9 @@ log "Configuring 'neovim' for 'root'..."
 config="/root/.config/nvim"
 sudo mkdir -p "$config"
 sudo cp "$HOME/.config/nvim/lua/options.lua" "/root/.config/nvim/init.lua"
+
+log "export EDITOR environment variable..."
+sudo rm -f /etc/profile.d/editor.sh
+cat <<'EOF' | sudo tee /etc/profile.d/editor.sh > /dev/null
+export EDITOR=nvim
+EOF
