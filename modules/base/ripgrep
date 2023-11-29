@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+install ripgrep
+install pandoc
+install poppler-utils
+install ffmpeg
+
+log "Deleting old files of ripgrep-all..."
+sudo rm -rf /opt/ripgrep-all
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Getting ripgrep-all url..."
+url="$(curl -s https://api.github.com/repos/phiresky/ripgrep-all/releases | jq -r '.[].assets[].browser_download_url' | grep -v alpha  | grep x86_64 | grep linux | sort -r | head -n 1)"
+log "Downloading ripgrep-all latest release..."
+curl -o ripgrep-all.tar.gz -L "$url"
+log "Extracting files..."
+tar xf ripgrep-all.tar.gz
+mv ripgrep_all-v* ripgrep-all
+log "Installing files..."
+sudo mv ripgrep-all /opt/
+popd
+rm -rf "$temp"
+log "Updating alternatives..."
+sudo update-alternatives --install /usr/local/bin/rga rga /opt/ripgrep-all/rga 0
+sudo update-alternatives --set rga /opt/ripgrep-all/rga
+sudo update-alternatives --install /usr/local/bin/rga-preproc rga-preproc /opt/ripgrep-all/rga-preproc 0
+sudo update-alternatives --set rga-preproc /opt/ripgrep-all/rga-preproc
