@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-install default-jdk
+log "Finding latest openjdk..."
+pkg="$(apt search openjdk | grep -P -o 'openjdk-\d\d+-jdk' | sort -rn | uniq | head -n 1)"
+log "Found '$pkg'"
+install "$pkg"
