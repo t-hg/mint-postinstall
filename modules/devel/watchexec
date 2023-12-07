@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+temp="$(mktemp -d)"
+pushd "$temp"
+log "Getting watchexec url..."
+url="$(curl -s https://api.github.com/repos/watchexec/watchexec/releases | jq -r '.[].assets[].browser_download_url' | grep -v alpha  | grep x86_64 | grep "linux-gnu.deb$" | sort -r | head -n 1)"
+log "URL: $url"
+log "Downloading latest release..."
+curl -s -o watchexec.deb -L "$url"
+log "Installing..."
+sudo dpkg -i watchexec.deb
+popd
+rm -rf "$temp"
