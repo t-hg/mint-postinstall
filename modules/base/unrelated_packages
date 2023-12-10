@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+install cloc
 install fwupd
 install gron
 install jq
