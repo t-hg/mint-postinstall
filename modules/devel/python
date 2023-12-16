@@ -2,3 +2,4 @@
 
 log "Installing pyright..."
 sudo npm install -g pyright
+install "python-is-python3"
