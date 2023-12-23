@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+install "wireguard"
+temp="$(mktemp -d)"
+pushd "$temp"
+bw_unlock
+bw get attachment "X13.conf" --itemid "354a5107-10ae-430a-ac7e-b09b00f5f11" --session "$BW_SESSION"
+sudo mv X13.conf /etc/wireguard/home.conf
+sudo nmcli connection import type wireguard file /etc/wireguard/home.conf
+nmcli connection modify home autoconnect no
+popd
+rm -rf "$temp"
